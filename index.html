@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BancaPro — Aposte com método, não com instinto</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0a0a0a;
+    --surface: #111111;
+    --surface2: #1a1a1a;
+    --border: rgba(255,255,255,0.07);
+    --text: #f0ede8;
+    --muted: #6b6b6b;
+    --accent: #c8f55a;
+    --accent2: #f5a623;
+
+    --t1: #4ade80;
+    --t2: #86efac;
+    --t3: #fbbf24;
+    --t4: #f97316;
+    --t5: #ef4444;
+    --t6: #dc2626;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+
+  /* MailerLite dark theme override */
+  .ml-embed-wrapper { width: 100%; max-width: 520px; }
+  .ml-form-embedContainer { box-sizing: border-box; }
+  .ml-form-embedWrapper { background: transparent !important; border: none !important; width: 100% !important; }
+  .ml-form-embedBody { padding: 0 !important; }
+  .ml-form-embedContent { display: none !important; }
+  .ml-form-fieldRow { margin: 0 0 12px 0 !important; }
+  .ml-field-group input {
+    background: var(--surface) !important;
+    color: var(--text) !important;
+    border: 1px solid var(--border) !important;
+    border-radius: 12px !important;
+    padding: 14px 20px !important;
+    font-family: "DM Sans", sans-serif !important;
+    font-size: 15px !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+    transition: border-color 0.2s;
+  }
+  .ml-field-group input::placeholder { color: var(--muted) !important; }
+  .ml-field-group input:focus { border-color: rgba(200,245,90,0.4) !important; outline: none !important; }
+  .ml-form-embedSubmit { margin: 0 !important; float: none !important; }
+  .ml-form-embedSubmit button.primary {
+    background: var(--accent) !important;
+    color: #0a0a0a !important;
+    border: none !important;
+    border-radius: 12px !important;
+    padding: 14px 28px !important;
+    font-family: "DM Sans", sans-serif !important;
+    font-size: 15px !important;
+    font-weight: 500 !important;
+    cursor: pointer !important;
+    width: 100% !important;
+    transition: opacity 0.2s !important;
+  }
+  .ml-form-embedSubmit button.primary:hover { opacity: 0.88 !important; }
+  .ml-form-successBody { padding: 0 !important; }
+  .ml-form-successContent h4 { display: none !important; }
+
+  /* NOISE TEXTURE */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.4;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    padding: 20px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border);
+    background: rgba(10,10,10,0.85);
+    backdrop-filter: blur(12px);
+  }
+
+  .logo {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 18px;
+    letter-spacing: -0.02em;
+  }
+
+  .logo span { color: var(--accent); }
+
+  nav a {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 14px;
+    transition: color 0.2s;
+  }
+
+  nav a:hover { color: var(--text); }
+
+  .nav-cta {
+    background: var(--accent);
+    color: #0a0a0a !important;
+    padding: 8px 20px;
+    border-radius: 100px;
+    font-weight: 500;
+    font-size: 14px;
+    transition: opacity 0.2s !important;
+  }
+
+  .nav-cta:hover { opacity: 0.85; }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 120px 40px 80px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-glow {
+    position: absolute;
+    width: 600px;
+    height: 600px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(200,245,90,0.08) 0%, transparent 70%);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+  }
+
+  .hero-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(200,245,90,0.08);
+    border: 1px solid rgba(200,245,90,0.2);
+    color: var(--accent);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 6px 14px;
+    border-radius: 100px;
+    margin-bottom: 32px;
+    width: fit-content;
+    animation: fadeUp 0.6s ease both;
+  }
+
+  .hero-tag::before {
+    content: '';
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--accent);
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%,100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+
+  h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(42px, 7vw, 88px);
+    font-weight: 800;
+    line-height: 1.0;
+    letter-spacing: -0.03em;
+    margin-bottom: 28px;
+    max-width: 900px;
+    animation: fadeUp 0.6s 0.1s ease both;
+  }
+
+  h1 em {
+    font-style: normal;
+    color: var(--accent);
+  }
+
+  .hero-sub {
+    font-size: clamp(16px, 2vw, 20px);
+    color: var(--muted);
+    max-width: 520px;
+    margin-bottom: 48px;
+    font-weight: 300;
+    line-height: 1.7;
+    animation: fadeUp 0.6s 0.2s ease both;
+  }
+
+  .hero-form {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    animation: fadeUp 0.6s 0.3s ease both;
+  }
+
+  .hero-form input {
+    flex: 1;
+    min-width: 260px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 14px 20px;
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .hero-form input::placeholder { color: var(--muted); }
+  .hero-form input:focus { border-color: rgba(200,245,90,0.4); }
+
+  .btn-primary {
+    background: var(--accent);
+    color: #0a0a0a;
+    border: none;
+    border-radius: 12px;
+    padding: 14px 28px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: opacity 0.2s, transform 0.1s;
+    white-space: nowrap;
+  }
+
+  .btn-primary:hover { opacity: 0.88; }
+  .btn-primary:active { transform: scale(0.98); }
+
+  .hero-note {
+    margin-top: 16px;
+    font-size: 12px;
+    color: var(--muted);
+    animation: fadeUp 0.6s 0.4s ease both;
+  }
+
+  /* SECTION COMMONS */
+  section {
+    padding: 100px 40px;
+    position: relative;
+  }
+
+  .section-label {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 16px;
+  }
+
+  h2 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(28px, 4vw, 48px);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+    margin-bottom: 20px;
+  }
+
+  .section-sub {
+    font-size: 17px;
+    color: var(--muted);
+    max-width: 500px;
+    font-weight: 300;
+    line-height: 1.7;
+    margin-bottom: 60px;
+  }
+
+  /* PROBLEM SECTION */
+  .problem {
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .problem-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+  }
+
+  .problem-card {
+    background: var(--surface);
+    padding: 32px;
+  }
+
+  .problem-card .icon {
+    width: 40px; height: 40px;
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+    margin-bottom: 16px;
+    background: rgba(255,255,255,0.04);
+  }
+
+  .problem-card h3 {
+    font-family: 'Syne', sans-serif;
+    font-size: 17px;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+
+  .problem-card p {
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+
+  /* TIERS SECTION */
+  .tiers-section { max-width: 900px; margin: 0 auto; }
+
+  .tier-bar {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 12px;
+    opacity: 0;
+    transform: translateX(-20px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+  }
+
+  .tier-bar.visible {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  .tier-label {
+    font-size: 13px;
+    color: var(--muted);
+    min-width: 100px;
+    text-align: right;
+  }
+
+  .tier-track {
+    flex: 1;
+    height: 44px;
+    background: var(--surface2);
+    border-radius: 8px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .tier-fill {
+    height: 100%;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    padding: 0 16px;
+    gap: 10px;
+    transition: width 1s cubic-bezier(0.16,1,0.3,1);
+  }
+
+  .tier-fill span {
+    font-size: 13px;
+    font-weight: 500;
+    color: rgba(0,0,0,0.75);
+    white-space: nowrap;
+  }
+
+  .tier-pct {
+    font-size: 13px;
+    color: var(--muted);
+    min-width: 36px;
+  }
+
+  /* HOW IT WORKS */
+  .steps {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 32px;
+    counter-reset: step;
+  }
+
+  .step {
+    counter-increment: step;
+    position: relative;
+    padding-top: 56px;
+  }
+
+  .step::before {
+    content: counter(step, decimal-leading-zero);
+    position: absolute;
+    top: 0;
+    font-family: 'Syne', sans-serif;
+    font-size: 40px;
+    font-weight: 800;
+    color: var(--border);
+    line-height: 1;
+  }
+
+  .step h3 {
+    font-family: 'Syne', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 10px;
+  }
+
+  .step p {
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.65;
+  }
+
+  /* CTA BOTTOM */
+  .cta-bottom {
+    text-align: center;
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+  }
+
+  .cta-bottom h2 { margin: 0 auto 16px; }
+
+  .cta-bottom p {
+    color: var(--muted);
+    font-size: 16px;
+    margin-bottom: 40px;
+    font-weight: 300;
+  }
+
+  .cta-form {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .cta-form input {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 14px 20px;
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    outline: none;
+    min-width: 260px;
+    transition: border-color 0.2s;
+  }
+
+  .cta-form input:focus { border-color: rgba(200,245,90,0.4); }
+  .cta-form input::placeholder { color: var(--muted); }
+
+  /* FOOTER */
+  footer {
+    padding: 32px 40px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  footer p { font-size: 13px; color: var(--muted); }
+
+  .disclaimer {
+    background: rgba(255,255,255,0.02);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px 24px;
+    font-size: 12px;
+    color: var(--muted);
+    max-width: 700px;
+    margin: 40px auto 0;
+    line-height: 1.6;
+    text-align: center;
+  }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* SUCCESS STATE */
+  .success-msg {
+    display: none;
+    color: var(--accent);
+    font-size: 14px;
+    margin-top: 12px;
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 600px) {
+    nav { padding: 16px 20px; }
+    .hero { padding: 100px 20px 60px; }
+    section { padding: 70px 20px; }
+    footer { padding: 24px 20px; }
+    .tier-label { min-width: 70px; font-size: 11px; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">Banca<span>Pro</span></div>
+  <div style="display:flex;gap:24px;align-items:center">
+    <a href="#como-funciona">Como funciona</a>
+    <a href="#fatias">As fatias</a>
+    <a href="#cta" class="nav-cta">Quero acesso</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-glow"></div>
+  <div class="hero-tag">Acesso antecipado gratuito</div>
+  <h1>Aposte com<br><em>método,</em><br>não com instinto</h1>
+  <p class="hero-sub">O BancaPro divide sua banca em 6 camadas de risco e sugere apostas proporcionais. Você acompanha o retorno real de cada fatia e ajusta ao longo do tempo.</p>
+
+  <div class="ml-embed-wrapper">
+  <div id="mlb2-39865262" class="ml-form-embedContainer ml-subscribe-form ml-subscribe-form-39865262">
+    <div class="ml-form-align-center">
+      <div class="ml-form-embedWrapper embedForm">
+        <div class="ml-form-embedBody ml-form-embedBodyDefault row-form">
+          <form class="ml-block-form" action="https://assets.mailerlite.com/jsonp/2266094/forms/184675191734929341/subscribe" data-code="" method="post" target="_blank">
+            <div class="ml-form-formContent">
+              <div class="ml-form-fieldRow ml-last-item">
+                <div class="ml-field-group ml-field-email ml-validate-email ml-validate-required">
+                  <input aria-label="email" aria-required="true" type="email" class="form-control" data-inputmask="" name="fields[email]" placeholder="seu@email.com" autocomplete="email">
+                </div>
+              </div>
+            </div>
+            <input type="hidden" name="ml-submit" value="1">
+            <div class="ml-form-embedSubmit">
+              <button type="submit" class="primary">Quero acesso antecipado →</button>
+              <button disabled="disabled" style="display:none;" type="button" class="loading">
+                <div class="ml-form-embedSubmitLoad"></div>
+                <span class="sr-only">Loading...</span>
+              </button>
+            </div>
+            <input type="hidden" name="anticsrf" value="true">
+          </form>
+        </div>
+        <div class="ml-form-successBody row-success" style="display:none">
+          <div class="ml-form-successContent">
+            <p style="color:var(--accent);font-size:15px;margin:0">✓ Recebemos seu email! Te avisaremos em breve.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+  <p class="hero-note" style="margin-top:16px">Gratuito durante o beta. Sem cartão de crédito.</p>
+</section>
+
+<!-- PROBLEMA -->
+<section class="problem">
+  <div style="max-width:900px;margin:0 auto">
+    <p class="section-label">O problema</p>
+    <h2>Por que a maioria perde no longo prazo</h2>
+    <p class="section-sub">Não é falta de conhecimento. É falta de método.</p>
+
+    <div class="problem-grid">
+      <div class="problem-card">
+        <div class="icon">⚡</div>
+        <h3>Apostas no impulso</h3>
+        <p>Colocar tudo numa múltipla de 20 eventos porque "sinto que vai". Sem critério, sem controle.</p>
+      </div>
+      <div class="problem-card">
+        <div class="icon">📉</div>
+        <h3>Banca mal distribuída</h3>
+        <p>Concentrar demais em jogos arriscados. Um resultado inesperado destrói semanas de disciplina.</p>
+      </div>
+      <div class="problem-card">
+        <div class="icon">🔁</div>
+        <h3>Sem memória de resultados</h3>
+        <p>Nunca saber quais tipos de aposta realmente funcionam. Repetir os mesmos erros sem perceber.</p>
+      </div>
+      <div class="problem-card">
+        <div class="icon">🎯</div>
+        <h3>Odds sem critério</h3>
+        <p>Misturar favoritos absolutos com apostas especulativas sem nenhuma lógica de portfólio.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- AS FATIAS -->
+<section id="fatias">
+  <div class="tiers-section">
+    <p class="section-label">A solução</p>
+    <h2>6 fatias, cobertura total</h2>
+    <p class="section-sub">Do favorito absoluto ao especulativo — cada fatia tem odds definidas, alocação proporcional e tracking separado.</p>
+
+    <div id="tiers-list">
+      <div class="tier-bar" data-delay="0">
+        <span class="tier-label">segura</span>
+        <div class="tier-track">
+          <div class="tier-fill" style="width:0%;background:var(--t1)">
+            <span>1.10 – 1.82</span>
+          </div>
+        </div>
+        <span class="tier-pct">29%</span>
+      </div>
+      <div class="tier-bar" data-delay="80">
+        <span class="tier-label">confortável</span>
+        <div class="tier-track">
+          <div class="tier-fill" style="width:0%;background:var(--t2)">
+            <span>1.82 – 3.00</span>
+          </div>
+        </div>
+        <span class="tier-pct">24%</span>
+      </div>
+      <div class="tier-bar" data-delay="160">
+        <span class="tier-label">moderada</span>
+        <div class="tier-track">
+          <div class="tier-fill" style="width:0%;background:var(--t3)">
+            <span>3.00 – 4.95</span>
+          </div>
+        </div>
+        <span class="tier-pct">19%</span>
+      </div>
+      <div class="tier-bar" data-delay="240">
+        <span class="tier-label">média</span>
+        <div class="tier-track">
+          <div class="tier-fill" style="width:0%;background:var(--t4)">
+            <span>4.95 – 8.17</span>
+          </div>
+        </div>
+        <span class="tier-pct">14%</span>
+      </div>
+      <div class="tier-bar" data-delay="320">
+        <span class="tier-label">arriscada</span>
+        <div class="tier-track">
+          <div class="tier-fill" style="width:0%;background:var(--t5)">
+            <span>8.17 – 13.5</span>
+          </div>
+        </div>
+        <span class="tier-pct">10%</span>
+      </div>
+      <div class="tier-bar" data-delay="400">
+        <span class="tier-label">alta voltagem</span>
+        <div class="tier-track">
+          <div class="tier-fill" style="width:0%;background:var(--t6)">
+            <span>13.5+</span>
+          </div>
+        </div>
+        <span class="tier-pct">5%</span>
+      </div>
+    </div>
+
+    <div class="disclaimer">
+      As alocações são pontos de partida. O app aprende com seu histórico e sugere ajustes baseados no que realmente funciona pra você.
+    </div>
+  </div>
+</section>
+
+<!-- COMO FUNCIONA -->
+<section id="como-funciona" style="background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border)">
+  <div style="max-width:900px;margin:0 auto">
+    <p class="section-label">Como funciona</p>
+    <h2>Simples por design</h2>
+    <p class="section-sub">Três passos. Sem fórmulas complexas, sem promessas vazias.</p>
+
+    <div class="steps">
+      <div class="step">
+        <h3>Informe sua banca</h3>
+        <p>Diga quanto você tem disponível. O app calcula automaticamente o valor ideal pra cada fatia de risco.</p>
+      </div>
+      <div class="step">
+        <h3>Receba sugestões</h3>
+        <p>O app indica eventos em cada faixa de odds. Você escolhe quais aceitar — o controle é sempre seu.</p>
+      </div>
+      <div class="step">
+        <h3>Registre e aprenda</h3>
+        <p>Anote o resultado de cada aposta. Veja qual fatia está performando melhor no seu histórico real.</p>
+      </div>
+      <div class="step">
+        <h3>Ajuste e evolua</h3>
+        <p>Com dados reais, o app sugere rebalancear suas fatias. Você vira mais consciente a cada semana.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA FINAL -->
+<section id="cta" class="cta-bottom">
+  <div style="max-width:600px;margin:0 auto">
+    <p class="section-label">Acesso antecipado</p>
+    <h2>Entre na lista e teste de graça</h2>
+    <p>Estamos montando o produto. Os primeiros inscritos testam antes de todo mundo e ajudam a moldar o que o BancaPro vai ser.</p>
+    <div class="ml-embed-wrapper">
+  <div id="mlb2-39865262" class="ml-form-embedContainer ml-subscribe-form ml-subscribe-form-39865262">
+    <div class="ml-form-align-center">
+      <div class="ml-form-embedWrapper embedForm">
+        <div class="ml-form-embedBody ml-form-embedBodyDefault row-form">
+          <form class="ml-block-form" action="https://assets.mailerlite.com/jsonp/2266094/forms/184675191734929341/subscribe" data-code="" method="post" target="_blank">
+            <div class="ml-form-formContent">
+              <div class="ml-form-fieldRow ml-last-item">
+                <div class="ml-field-group ml-field-email ml-validate-email ml-validate-required">
+                  <input aria-label="email" aria-required="true" type="email" class="form-control" data-inputmask="" name="fields[email]" placeholder="seu@email.com" autocomplete="email">
+                </div>
+              </div>
+            </div>
+            <input type="hidden" name="ml-submit" value="1">
+            <div class="ml-form-embedSubmit">
+              <button type="submit" class="primary">Garantir meu acesso →</button>
+              <button disabled="disabled" style="display:none;" type="button" class="loading">
+                <div class="ml-form-embedSubmitLoad"></div>
+                <span class="sr-only">Loading...</span>
+              </button>
+            </div>
+            <input type="hidden" name="anticsrf" value="true">
+          </form>
+        </div>
+        <div class="ml-form-successBody row-success" style="display:none">
+          <div class="ml-form-successContent">
+            <p style="color:var(--accent);font-size:15px;margin:0">✓ Recebemos seu email! Te avisaremos em breve.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    <p style="font-size:12px;color:var(--muted);margin-top:16px">Sem spam. Só atualizações do produto.</p>
+  </div>
+</section>
+
+<footer>
+  <div class="logo">Banca<span>Pro</span></div>
+  <p>© 2026 BancaPro — produto em desenvolvimento</p>
+  <p style="font-size:12px;max-width:360px;text-align:right">Apostar envolve risco de perda financeira. Jogue com responsabilidade.</p>
+</footer>
+
+
+
+<script>
+function ml_webform_success_39865262() {
+  var $ = ml_jQuery || jQuery;
+  $('.ml-subscribe-form-39865262 .row-success').show();
+  $('.ml-subscribe-form-39865262 .row-form').hide();
+}
+</script>
+<script src="https://groot.mailerlite.com/js/w/webforms.min.js?v95037e5bac78f29ed026832ca21a7c7b" type="text/javascript"></script>
+<script>fetch("https://assets.mailerlite.com/jsonp/2266094/forms/184675191734929341/takel")</script>
+</body>
+</html>
