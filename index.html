@@ -346,9 +346,8 @@
     align-items: center;
     gap: 16px;
     margin-bottom: 12px;
-    opacity: 0;
-    transform: translateX(-20px);
-    transition: opacity 0.5s ease, transform 0.5s ease;
+    opacity: 1;
+    transform: translateX(0);
   }
 
   .tier-fill {
@@ -619,56 +618,57 @@
     <h2>6 fatias, cobertura total</h2>
     <p class="section-sub">Do favorito absoluto ao especulativo — cada fatia tem odds definidas, alocação proporcional e tracking separado.</p>
 
+    
     <div id="tiers-list">
-      <div class="tier-bar" data-delay="0">
+      <div class="tier-bar">
         <span class="tier-label">segura</span>
         <div class="tier-track">
-          <div class="tier-fill" style="width:0%;background:var(--t1)">
+          <div class="tier-fill" style="width:92%;background:#4ade80">
             <span>1.10 – 1.82</span>
           </div>
         </div>
         <span class="tier-pct">29%</span>
       </div>
-      <div class="tier-bar" data-delay="80">
+      <div class="tier-bar">
         <span class="tier-label">confortável</span>
         <div class="tier-track">
-          <div class="tier-fill" style="width:0%;background:var(--t2)">
+          <div class="tier-fill" style="width:76%;background:#86efac">
             <span>1.82 – 3.00</span>
           </div>
         </div>
         <span class="tier-pct">24%</span>
       </div>
-      <div class="tier-bar" data-delay="160">
+      <div class="tier-bar">
         <span class="tier-label">moderada</span>
         <div class="tier-track">
-          <div class="tier-fill" style="width:0%;background:var(--t3)">
+          <div class="tier-fill" style="width:59%;background:#fbbf24">
             <span>3.00 – 4.95</span>
           </div>
         </div>
         <span class="tier-pct">19%</span>
       </div>
-      <div class="tier-bar" data-delay="240">
+      <div class="tier-bar">
         <span class="tier-label">média</span>
         <div class="tier-track">
-          <div class="tier-fill" style="width:0%;background:var(--t4)">
+          <div class="tier-fill" style="width:43%;background:#f97316">
             <span>4.95 – 8.17</span>
           </div>
         </div>
         <span class="tier-pct">14%</span>
       </div>
-      <div class="tier-bar" data-delay="320">
+      <div class="tier-bar">
         <span class="tier-label">arriscada</span>
         <div class="tier-track">
-          <div class="tier-fill" style="width:0%;background:var(--t5)">
+          <div class="tier-fill" style="width:31%;background:#ef4444">
             <span>8.17 – 13.5</span>
           </div>
         </div>
         <span class="tier-pct">10%</span>
       </div>
-      <div class="tier-bar" data-delay="400">
+      <div class="tier-bar">
         <span class="tier-label">alta voltagem</span>
         <div class="tier-track">
-          <div class="tier-fill" style="width:0%;background:var(--t6)">
+          <div class="tier-fill" style="width:16%;background:#dc2626">
             <span>13.5+</span>
           </div>
         </div>
